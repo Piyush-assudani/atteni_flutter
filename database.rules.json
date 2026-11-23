@@ -1,0 +1,25 @@
+{
+  "rules": {
+    "artifacts": {
+      "student-system-v2": {
+        "public": {
+          "data": {
+            ".read": "auth != null",
+            ".write": "auth != null",
+            "students": {
+              ".indexOn": ["parentPhones", "parent_phone"]
+            }
+          }
+        },
+        "users": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        },
+        "crashes": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      }
+    }
+  }
+}

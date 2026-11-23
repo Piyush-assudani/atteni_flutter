@@ -1,0 +1,11 @@
+{
+  "name": "atteni-functions",
+  "description": "Cloud Functions for Atteni System",
+  "dependencies": {
+    "firebase-admin": "^11.5.0",
+    "firebase-functions": "^4.2.0"
+  },
+  "engines": {
+    "node": "18"
+  }
+}

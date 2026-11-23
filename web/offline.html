@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Connection Lost | Atteni</title>
+    <link rel="canonical" href="https://atteni.online/offline">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #050505;
+            --brand: #6366f1;
+            --brand-glow: rgba(99, 102, 241, 0.5);
+            --danger: #ff3366;
+            --danger-glow: rgba(255, 51, 102, 0.4);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 51, 102, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--text-main);
+        }
+
+        /* Interactive Grid Background */
+        .grid-bg {
+            position: absolute;
+            inset: -50%;
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); }
+        }
+
+        /* Glass Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            background: rgba(20, 20, 25, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 32px;
+            padding: 40px 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Dynamic SVG Illustration */
+        .illustration {
+            margin: 0 auto 30px;
+            height: 140px;
+            position: relative;
+        }
+
+        .signal-bars {
+            transform-origin: bottom;
+            animation: pulseSignal 2s infinite alternate;
+        }
+
+        @keyframes pulseSignal {
+            0% { opacity: 0.2; transform: scaleY(0.8); fill: var(--danger); }
+            100% { opacity: 1; transform: scaleY(1); fill: var(--danger); }
+        }
+
+        .planet {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        p {
+            font-size: 1rem;
+            color: var(--text-sub);
+            margin-bottom: 30px;
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: none;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--brand), #818cf8);
+            color: white;
+            box-shadow: 0 10px 20px var(--brand-glow);
+            margin-bottom: 16px;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+            box-shadow: 0 5px 10px var(--brand-glow);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .spinner {
+            width: 20px; height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .radar {
+            position: absolute;
+            top: -50px; right: -50px;
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 60%);
+            z-index: -1;
+            animation: radarPing 4s infinite;
+        }
+
+        @keyframes radarPing {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+
+    <meta name="llm-context" content="Atteni: Smart, real-time school bus attendance and live tracking platform in India. Bridges communication between parents, teachers, and admins. Owned by Assudani Group.">
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+
+    <div class="container" id="tilt-card">
+        <div class="radar"></div>
+
+        <div class="illustration">
+            <svg viewBox="0 0 200 140" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <g class="planet">
+                    <circle cx="100" cy="50" r="30" fill="url(#gradPlanet)" />
+                    <path d="M 60 50 Q 100 80 140 50 Q 100 20 60 50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3" />
+                    <path d="M 100 80 C 100 110, 70 120, 70 140" fill="none" stroke="var(--danger)" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 6" />
+                    <circle cx="70" cy="140" r="4" fill="var(--danger)" />
+                </g>
+                <path class="signal-bars" d="M 140 100 L 140 120 M 150 90 L 150 120 M 160 70 L 160 120" stroke="var(--danger)" stroke-width="5" stroke-linecap="round" fill="none" />
+                <defs>
+                    <radialGradient id="gradPlanet" cx="30%" cy="30%" r="70%">
+                        <stop offset="0%" stop-color="#818cf8"/>
+                        <stop offset="100%" stop-color="#312e81"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <h1>Lost in Space</h1>
+        <p>Your connection to the network has been severed. Check your Wi-Fi or data connection.</p>
+
+        <button class="btn btn-primary" id="retryBtn" onclick="retryConnection()">
+            <div class="spinner" id="btnSpinner"></div>
+            <i class="bi bi-arrow-repeat" id="btnIcon"></i>
+            <span id="btnText">Reconnect to Grid</span>
+        </button>
+
+        <a href="./pages/game.html" class="btn btn-secondary">
+            <i class="bi bi-controller"></i>
+            Play Transport Run
+        </a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script>
+        VanillaTilt.init(document.querySelector("#tilt-card"), {
+            max: 10,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.15,
+            gyroscope: true
+        });
+
+        async function retryConnection() {
+            const btn = document.getElementById('retryBtn');
+            const txt = document.getElementById('btnText');
+            const icon = document.getElementById('btnIcon');
+            const spinner = document.getElementById('btnSpinner');
+
+            icon.style.display = 'none';
+            spinner.style.display = 'block';
+            txt.innerText = 'Scanning Network...';
+            btn.style.pointerEvents = 'none';
+
+            if (navigator.onLine) {
+                try {
+                    const res = await fetch('pages/main.html', { method: 'HEAD', cache: 'no-store' });
+                    if(res.ok || res.status===404) {
+                        window.location.href = "./pages/main.html";
+                        return;
+                    }
+                } catch(e) {}
+            }
+
+            setTimeout(() => {
+                icon.style.display = 'block';
+                spinner.style.display = 'none';
+                txt.innerText = 'Reconnect to Grid';
+                btn.style.pointerEvents = 'auto';
+                const card = document.getElementById('tilt-card');
+                card.style.transform = 'translateX(-10px)';
+                setTimeout(() => card.style.transform = 'translateX(10px)', 100);
+                setTimeout(() => card.style.transform = 'translateX(-10px)', 200);
+                setTimeout(() => card.style.transform = 'translateX(0)', 300);
+            }, 1500);
+        }
+        window.addEventListener('online', retryConnection);
+    </script>
+</body>
+</html>
